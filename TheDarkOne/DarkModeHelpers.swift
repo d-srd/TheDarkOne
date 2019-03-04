@@ -6,9 +6,12 @@
 //  Copyright © 2019 bornfight. All rights reserved.
 //
 
-import Foundation
+import Cocoa
 
 class DarkModeHelpers: NSObject {
+    let darkModeImage = NSImage(named: "moon-full")
+    let lightModeImage = NSImage(named: "moon-outline")
+    
     var isDarkMode: Bool {
         let script = """
         tell application "System Events"

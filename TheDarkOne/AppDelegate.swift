@@ -29,9 +29,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     @objc private func darkModeChanged(_ notification: Notification) {
         if darkHelper.isDarkMode {
-            statusItem.button?.title = "on"
+            statusItem.button?.image = darkHelper.darkModeImage
         } else {
-            statusItem.button?.title = "off"
+            statusItem.button?.image = darkHelper.lightModeImage
         }
     }
     
