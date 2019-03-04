@@ -22,6 +22,8 @@
 	<string>1</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
+	<key>NSAppleEventsUsageDescription</key>
+	<string>Needed to toggle dark mode</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2019 bornfight. All rights reserved.</string>
 	<key>NSMainNibFile</key>

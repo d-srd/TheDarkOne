@@ -11,17 +11,55 @@ import Cocoa
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
 
-    @IBOutlet weak var window: NSWindow!
-
+    private let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        // Insert code here to initialize your application
+        DistributedNotificationCenter.default().addObserver(
+            self,
+            selector: #selector(darkModeChanged(_:)),
+            name: NSNotification.Name(rawValue: "AppleInterfaceThemeChangedNotification"),
+            object: nil
+        )
+        
+        statusItem.button?.target = self
+        statusItem.button?.action = #selector(toggleDarkMode(_:))
+        statusItem.button?.title = "hi"
     }
 
-    func applicationWillTerminate(_ aNotification: Notification) {
-        // Insert code here to tear down your application
+    @objc private func darkModeChanged(_ notification: Notification) {
+        if isDarkMode {
+            statusItem.button?.title = "on"
+        } else {
+            statusItem.button?.title = "off"
+        }
+    }
+    
+    var isDarkMode: Bool {
+        let script = """
+        tell application "System Events"
+            tell appearance preferences
+
+                get properties
+
+                return dark mode
+
+            end tell
+        end tell
+        """
+        
+        var error: NSDictionary?
+        
+        return NSAppleScript(source: script)!.executeAndReturnError(&error).booleanValue
     }
 
-
+    
+    @objc func toggleDarkMode(_ sender: Any) {
+        let script = "tell application \"System Events\" to tell appearance preferences to set dark mode to not dark mode"
+        
+        var error: NSDictionary?
+        
+        if let scriptObject = NSAppleScript(source: script) {
+            scriptObject.executeAndReturnError(&error)
+        }
+    }
 }
-
