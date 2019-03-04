@@ -11,6 +11,7 @@ import Cocoa
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
 
+    private let darkHelper = DarkModeHelpers()
     private let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
@@ -21,45 +22,21 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             object: nil
         )
         
-        statusItem.button?.target = self
-        statusItem.button?.action = #selector(toggleDarkMode(_:))
+        statusItem.button?.target = darkHelper
+        statusItem.button?.action = #selector(darkHelper.toggleDarkMode(_:))
         statusItem.button?.title = "hi"
     }
 
     @objc private func darkModeChanged(_ notification: Notification) {
-        if isDarkMode {
+        if darkHelper.isDarkMode {
             statusItem.button?.title = "on"
         } else {
             statusItem.button?.title = "off"
         }
     }
     
-    var isDarkMode: Bool {
-        let script = """
-        tell application "System Events"
-            tell appearance preferences
-
-                get properties
-
-                return dark mode
-
-            end tell
-        end tell
-        """
-        
-        var error: NSDictionary?
-        
-        return NSAppleScript(source: script)!.executeAndReturnError(&error).booleanValue
-    }
+    
 
     
-    @objc func toggleDarkMode(_ sender: Any) {
-        let script = "tell application \"System Events\" to tell appearance preferences to set dark mode to not dark mode"
-        
-        var error: NSDictionary?
-        
-        if let scriptObject = NSAppleScript(source: script) {
-            scriptObject.executeAndReturnError(&error)
-        }
-    }
+   
 }
